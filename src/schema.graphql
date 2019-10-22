@@ -1,0 +1,37 @@
+type Query {
+  active: String!
+  feed: Feed!
+  blog(id: ID!): BlogPost
+  unPublished: [BlogPost!]!
+}
+
+type BlogPost {
+  id: ID!
+  title: String!
+  post: String!
+  author: User!
+  editors: [User!]!
+}
+
+type Feed {
+  blogs: [BlogPost!]!
+  count: Int!
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  photo: String
+  posts: [BlogPost!]!
+  status: String!
+}
+
+type AuthPayload {
+  token: String
+  user: User
+}
+
+type Mutation {
+  login (email: String!, password: String!): AuthPayload
+}
