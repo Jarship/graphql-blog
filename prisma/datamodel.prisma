@@ -1,0 +1,77 @@
+type Page {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  name: String!
+  url: String!
+  visitors: [Visitor!]! @relation(link: INLINE)
+}
+
+type BlogPost {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  title: String!
+  post: String!
+  author: User! @relation(name: "Author")
+  editors: [User!]! @relation(name: "Editors", onDelete: SET_NULL)
+  vistors: [Visitor!]! @relation(link: INLINE)
+  isPublished: Boolean! @default(value: false)
+  tags: [String!]!
+  comments: [Comment!]! @relation(link: INLINE)
+}
+
+type User {
+  id: ID! @id
+  name: String!
+  email: String! @unique
+  password: String!
+  photo: String
+  posts: [BlogPost!]! @relation(name: "Author", link: INLINE)
+  edits: [BlogPost!]! @relation(name: "Editors", link: INLINE)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  status: UserLevel! @default(value: UNVERIFIED)
+  comments: [Comment!]! @relation(link: INLINE)
+  restriction: Flagged! @default(value: NONE)
+}
+
+type Visitor {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  ipAddress: String!
+}
+
+type Subscriber {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  email: String!
+  active: Boolean! @default(value: true)
+  tags: [String!]!
+}
+
+type Comment {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  content: String!
+  post: BlogPost!
+  parentComment: Comment @relation(name: "Parent", link: INLINE, onDelete: SET_NULL)
+  childComments: [Comment!]! @relation(name: "Children", link: INLINE, onDelete: SET_NULL)
+  status: Flagged! @default(value: NONE)
+}
+
+enum UserLevel {
+  UNVERIFIED
+  READER
+  EDITOR
+  AUTHOR
+  ADMINISTRATOR
+}
+
+enum Flagged {
+  NONE
+  SPAM
+  NSFW
+  ABUSIVE
+}

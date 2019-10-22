@@ -1,0 +1,16 @@
+# The HTTP endpoint for your primsa API
+endpoint: 'http://localhost:4466'
+
+# Points to the file that contains your datamodel
+datamodel: datamodel.prisma
+
+# Configuration for MongoDB
+databaseType: document
+
+# Secret key for the Prisma Database
+secret: ${env:PRISMA_SECRET}
+
+# Specifies language & location for the generated Prisma client
+generate:
+  - generator: javascript-client
+    output: ../src/generated/prisma-client
