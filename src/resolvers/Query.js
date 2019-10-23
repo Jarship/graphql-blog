@@ -1,3 +1,5 @@
+const { getUserId } = require("../utils");
+
 function active () {
   return "The GraphQL API is active";
 };
@@ -16,9 +18,15 @@ function unPublished (parent, args, context) {
   return context.prisma.blogPost({ where: filter});
 }
 
+function getUser (parent, args, context) {
+  const userId = getUserId(context);
+  return context.prisma.user({ id: userId });
+};
+
 module.exports = {
   active,
   feed,
   blog,
   unPublished,
+  getUser,
 };
