@@ -16,7 +16,7 @@ type BlogPost {
   author: User! @relation(name: "Author")
   editors: [User!]! @relation(name: "Editors", onDelete: SET_NULL)
   vistors: [Visitor!]! @relation(link: INLINE)
-  isPublished: Boolean! @default(value: false)
+  blogStatus: BlogStatus! @default(value: UNSAVED)
   tags: [String!]!
   comments: [Comment!]! @relation(link: INLINE)
 }
@@ -74,4 +74,11 @@ enum Flagged {
   SPAM
   NSFW
   ABUSIVE
+}
+
+enum BlogStatus {
+  UNSAVED
+  DRAFT
+  REVIEW
+  PUBLISHED
 }
