@@ -1,5 +1,5 @@
 # The HTTP endpoint for your primsa API
-endpoint: 'http://localhost:4466'
+endpoint: 'http://localhost/db'
 
 # Points to the file that contains your datamodel
 datamodel: datamodel.prisma
