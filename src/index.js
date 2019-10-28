@@ -22,7 +22,12 @@ const server = new GraphQLServer({
 
 const options = {
   port: process.env.PORT,
-  playground: process.env.PLAYGROUND
+  endpoint: process.env.ENDPOINT,
+  subscriptions: process.env.SUBSCRIPTION,
+  playground: process.env.PLAYGROUND,
+  cors: {
+    origin: "http://localhost"
+  }
 };
 server.start(options, ({ port }) => console.log(`Server is running on http://localhost:${port}`));
 
