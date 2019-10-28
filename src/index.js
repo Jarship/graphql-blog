@@ -10,7 +10,7 @@ const resolvers = {
 };
 
 const server = new GraphQLServer({
-  typeDefs: './graphql-blog/src/schema.graphql',
+  typeDefs: process.env.PATHWAY,
   resolvers,
   context: request => {
     return {
