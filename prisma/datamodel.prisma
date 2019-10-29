@@ -19,6 +19,7 @@ type BlogPost {
   blogStatus: BlogStatus! @default(value: UNSAVED)
   tags: [String!]!
   comments: [Comment!]! @relation(link: INLINE)
+  restriction: Flagged! @default(value: NONE)
 }
 
 type User {
@@ -58,7 +59,7 @@ type Comment {
   post: BlogPost!
   parentComment: Comment @relation(name: "Parent", link: INLINE, onDelete: SET_NULL)
   childComments: [Comment!]! @relation(name: "Children", link: INLINE, onDelete: SET_NULL)
-  status: Flagged! @default(value: NONE)
+  restriction: Flagged! @default(value: NONE)
 }
 
 enum UserLevel {
