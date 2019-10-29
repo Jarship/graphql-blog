@@ -1,5 +1,5 @@
 # The HTTP endpoint for your primsa API
-endpoint: ${env: PRISMA_ENDPOINT}
+endpoint: ${env:PRISMA_ENDPOINT}
 
 # Points to the file that contains your datamodel
 datamodel: datamodel.prisma
