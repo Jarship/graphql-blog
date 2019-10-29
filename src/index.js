@@ -26,7 +26,8 @@ const options = {
   subscriptions: process.env.SUBSCRIPTION,
   playground: process.env.PLAYGROUND,
   cors: {
-    origin: "http://localhost"
+    "origin": ["http://localhost", "https://satsui.com", "https://www.satsui.com"],
+    "allowedHeaders": ["Authorization"]
   }
 };
 server.start(options, ({ port }) => console.log(`Server is running on http://localhost:${port}`));
