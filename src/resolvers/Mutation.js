@@ -6,6 +6,10 @@ const { getUserId, generateRandomToken } = require('../utils');
 
 async function createInvite (parent, args, context) {
   const userId = getUserId(context);
+  const invites = await context.prisma.user({ id: userId }).invitations();
+  if (invites.length >= 5) {
+    throw new Error (`User - ${userId} - has reached their invitation limit`);
+  }
   const token = generateRandomToken();
   const invite = await context.prisma.createInvite({ token });
   await context.prisma.updateUser(
