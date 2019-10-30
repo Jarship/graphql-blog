@@ -26,6 +26,7 @@ type User {
   photo: String
   posts: [BlogPost!]!
   status: String!
+  invitations: [String!]!
 }
 
 type AuthPayload {
@@ -36,4 +37,5 @@ type AuthPayload {
 type Mutation {
   signInUser (email: String!, password: String!): AuthPayload
   createUser (email: String!, name: String!, password: String!): AuthPayload
+  createInvite: String!
 }
