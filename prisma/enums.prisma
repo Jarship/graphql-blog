@@ -1,0 +1,21 @@
+enum UserLevel {
+  UNVERIFIED
+  READER
+  EDITOR
+  AUTHOR
+  ADMINISTRATOR
+}
+
+enum Flagged {
+  NONE
+  SPAM
+  NSFW
+  ABUSIVE
+}
+
+enum BlogStatus {
+  UNSAVED
+  DRAFT
+  REVIEW
+  PUBLISHED
+}
