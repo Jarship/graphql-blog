@@ -20,7 +20,29 @@ async function createInvite (parent, args, context) {
   );
   
   return token;
-}
+};
+
+async function expireInvite (parent, args, context) {
+  const userId = getUserId(context);
+  const date = new Date();
+  const invite = await context.prisma.updateInvite(
+    {
+      where : { token : args.token },
+      data: {
+        expiresAt: date.toISOString()
+      }
+    }
+  );
+  await context.prisma.updateUser(
+    {
+      where: { id: userId },
+      data: { invitations : {
+        disconnect: { id: invite.id }
+      }}
+    }
+  );
+  return "Token expired";
+};
 
 async function signInUser (parent, args, context) {
   const user = await context.prisma.user({ email: args.email });
@@ -55,5 +77,6 @@ async function createUser (parent, args, context) {
 module.exports = {
   signInUser,
   createUser,
-  createInvite
+  createInvite,
+  expireInvite,
 };
