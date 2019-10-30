@@ -31,7 +31,7 @@ async function expireInvite (parent, args, context) {
   const date = new Date();
   const invite = await context.prisma.updateInvite(
     {
-      where : { token : args.token },
+      where : { token : args.invite },
       data: {
         expiresAt: date.toISOString()
       }
@@ -68,10 +68,12 @@ async function signInUser (parent, args, context) {
 };
 
 async function createUser (parent, args, context) {
-  const invite = await context.prisma.invite({ token: args.token });
-  console.log('Invite found');
+  const invite = await context.prisma.invite({ token: args.invite });
   if (invite.expiresAt) {
     throw new Error('Invitation has been fulfilled');
+  } else {
+    await expireInvite({}, { invite: invite.token }, context);
+    delete args.invite;
   }
   const password = await bcrypt.hash(args.password, parseInt(PASS_SECRET, 10));
   const user = await context.prisma.createUser({ ...args, password});

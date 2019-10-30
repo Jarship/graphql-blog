@@ -36,7 +36,7 @@ type AuthPayload {
 
 type Mutation {
   signInUser (email: String!, password: String!): AuthPayload
-  createUser (email: String!, name: String!, password: String!, token: String!): AuthPayload
+  createUser (email: String!, name: String!, password: String!, invite: String!): AuthPayload
   createInvite: String!
-  expireInvite (token: String!): String
+  expireInvite (invite: String!): String
 }
