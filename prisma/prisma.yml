@@ -2,7 +2,9 @@
 endpoint: ${env:PRISMA_ENDPOINT}
 
 # Points to the file that contains your datamodel
-datamodel: datamodel.prisma
+datamodel:
+  - types.prisma
+  - enums.prisma
 
 # Configuration for MongoDB
 databaseType: document

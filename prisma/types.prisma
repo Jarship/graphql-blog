@@ -35,6 +35,7 @@ type User {
   status: UserLevel! @default(value: UNVERIFIED)
   comments: [Comment!]! @relation(link: INLINE)
   restriction: Flagged! @default(value: NONE)
+  invitations: [Invite!]! @relation(name: "Invites", link: INLINE)
 }
 
 type Visitor {
@@ -62,24 +63,9 @@ type Comment {
   restriction: Flagged! @default(value: NONE)
 }
 
-enum UserLevel {
-  UNVERIFIED
-  READER
-  EDITOR
-  AUTHOR
-  ADMINISTRATOR
-}
-
-enum Flagged {
-  NONE
-  SPAM
-  NSFW
-  ABUSIVE
-}
-
-enum BlogStatus {
-  UNSAVED
-  DRAFT
-  REVIEW
-  PUBLISHED
+type Invite {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  expiresAt: DateTime
+  token: String! @unique
 }
