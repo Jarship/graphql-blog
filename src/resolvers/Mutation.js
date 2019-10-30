@@ -68,6 +68,11 @@ async function signInUser (parent, args, context) {
 };
 
 async function createUser (parent, args, context) {
+  const invite = await context.prisma.invite({ token: args.token });
+  console.log('Invite found');
+  if (invite.expiresAt) {
+    throw new Error('Invitation has been fulfilled');
+  }
   const password = await bcrypt.hash(args.password, parseInt(PASS_SECRET, 10));
   const user = await context.prisma.createUser({ ...args, password});
   const token = jwt.sign({ userId: user.id}, APP_SECRET);
