@@ -85,9 +85,16 @@ async function createUser (parent, args, context) {
   };
 };
 
+async function markVisitor (parent, args, context) {
+  const visitor = await context.prisma.createVisitor({ ipAddress: args.ipAddress });
+
+  return !!visitor;
+};
+
 module.exports = {
   signInUser,
   createUser,
   createInvite,
   expireInvite,
+  markVisitor,
 };
