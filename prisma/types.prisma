@@ -69,3 +69,11 @@ type Invite {
   expiresAt: DateTime
   token: String! @unique
 }
+
+type Error {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  message: String!
+  status: ErrorStatus!
+  location: String!
+}

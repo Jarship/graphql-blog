@@ -19,3 +19,8 @@ enum BlogStatus {
   REVIEW
   PUBLISHED
 }
+
+enum ErrorStatus {
+  WARNING
+  ERROR
+}
