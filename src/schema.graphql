@@ -17,6 +17,7 @@ type BlogPost {
 type Feed {
   blogs: [BlogPost!]!
   count: Int!
+  error: Error
 }
 
 type User {
@@ -27,17 +28,30 @@ type User {
   posts: [BlogPost!]!
   status: String!
   invitations: [String!]!
+  error: Error
 }
 
 type AuthPayload {
   token: String
   user: User
+  error: Error
+}
+
+type Invite {
+  invite: String
+  error: Error
+}
+
+type Error {
+  name: String!
+  message: String!
 }
 
 type Mutation {
-  signInUser (email: String!, password: String!): AuthPayload
-  createUser (email: String!, name: String!, password: String!, invite: String!): AuthPayload
-  createInvite: String!
-  expireInvite (invite: String!): String
-  markVisitor (ipAddress: String!): Boolean
+  signInUser (email: String!, password: String!): AuthPayload!
+  createUser (email: String!, name: String!, password: String!, invite: String!): AuthPayload!
+  createInvite: Invite!
+  expireInvite (invite: String!): Invite!
+  markVisitor (ipAddress: String!): Boolean!
+  logError (message: String!): Boolean!
 }

@@ -2,13 +2,31 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const APP_SECRET = process.env.APP_SECRET;
 const PASS_SECRET = process.env.PASS_SECRET;
-const { getUserId, generateRandomToken } = require('../utils');
+const { 
+  getUserId,
+  generateRandomToken,
+  AUTHENTICATION_ERROR,
+  INVITATION_LIMIT_ERROR,
+  NO_VALID_USER_ERROR,
+  INVALID_PASSWORD_ERROR,
+  INVALID_INVITATION_ERROR
+} = require('../utils');
+
 
 async function createInvite (parent, args, context) {
   const userId = getUserId(context);
+  if (!userId) {
+    return {
+      invite: null,
+      error : AUTHENTICATION_ERROR
+    };
+  }
   const invites = await context.prisma.user({ id: userId }).invitations();
   if (invites.length >= 5) {
-    throw new Error (`User - ${userId} - has reached their invitation limit`);
+    return {
+      invite: null,
+      error: INVITATION_LIMIT_ERROR
+    };
   }
   const token = generateRandomToken();
   const invite = await context.prisma.createInvite({ token });
@@ -23,11 +41,21 @@ async function createInvite (parent, args, context) {
     }
   );
   
-  return token;
+  return {
+    invite: token,
+    error: null,
+  };
 };
 
 async function expireInvite (parent, args, context) {
   const userId = getUserId(context);
+  if (!userId) {
+    return {
+      invite: null,
+      error: AUTHENTICATION_ERROR
+
+    }
+  }
   const date = new Date();
   const invite = await context.prisma.updateInvite(
     {
@@ -45,18 +73,29 @@ async function expireInvite (parent, args, context) {
       }}
     }
   );
-  return "Token expired";
+  return {
+    invite: "Token expired",
+    error: null
+  };
 };
 
 async function signInUser (parent, args, context) {
   const user = await context.prisma.user({ email: args.email });
   if (!user) {
-    throw new Error('No such user found');
+    return {
+      token: null,
+      user: null,
+      error: NO_VALID_USER_ERROR
+    };
   }
   
   const valid = await bcrypt.compare(args.password, user.password);
   if (!valid) {
-    throw new Error('Invalid password');
+    return {
+      token: null,
+      user: null,
+      error: INVALID_PASSWORD_ERROR
+    };
   }
 
   const token = jwt.sign({ userId: user.id }, APP_SECRET);
@@ -64,13 +103,18 @@ async function signInUser (parent, args, context) {
   return {
     token,
     user,
+    error: null,
   };
 };
 
 async function createUser (parent, args, context) {
   const invite = await context.prisma.invite({ token: args.invite });
   if (invite.expiresAt) {
-    throw new Error('Invitation has been fulfilled');
+    return {
+      token: null,
+      user: null,
+      error: INVALID_INVITATION_ERROR
+    };
   } else {
     await expireInvite({}, { invite: invite.token }, context);
     delete args.invite;
@@ -82,14 +126,19 @@ async function createUser (parent, args, context) {
   return {
     token,
     user,
+    error: null,
   };
 };
 
 async function markVisitor (parent, args, context) {
   const visitor = await context.prisma.createVisitor({ ipAddress: args.ipAddress });
-
   return !!visitor;
 };
+
+async function logError (parent, args, context) {
+  const error = await context.prisma.createError({ ...args });
+  return !!error;
+}
 
 module.exports = {
   signInUser,
@@ -97,4 +146,5 @@ module.exports = {
   createInvite,
   expireInvite,
   markVisitor,
+  logError,
 };
