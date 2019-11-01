@@ -3,7 +3,7 @@ type Query {
   feed: Feed!
   blog(id: ID!): BlogPost
   unPublished: [BlogPost!]!
-  getUser: User
+  getUser: User!
 }
 
 type BlogPost {
@@ -21,13 +21,13 @@ type Feed {
 }
 
 type User {
-  id: ID!
-  name: String!
-  email: String!
+  id: ID
+  name: String
+  email: String
   photo: String
-  posts: [BlogPost!]!
-  status: String!
-  invitations: [String!]!
+  posts: [BlogPost!]
+  status: String
+  invitations: [String!]
   error: Error
 }
 
@@ -53,5 +53,5 @@ type Mutation {
   createInvite: Invite!
   expireInvite (invite: String!): Invite!
   markVisitor (ipAddress: String!): Boolean!
-  logError (message: String!): Boolean!
+  logError (message: String!, location: String!, status: String!): Boolean!
 }

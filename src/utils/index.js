@@ -6,7 +6,7 @@ const {
   INVALID_INVITATION_ERROR
 } = require('./errors');
 
-const { getUserId, generateRandomToken } = require('./function');
+const { getUserId, generateRandomToken } = require('./functions');
 
 
 module.exports = {
