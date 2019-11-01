@@ -1,20 +1,20 @@
-const jwt = require('jsonwebtoken');
+const {
+  AUTHENTICATION_ERROR,
+  INVITATION_LIMIT_ERROR,
+  NO_VALID_USER_ERROR,
+  INVALID_PASSWORD_ERROR,
+  INVALID_INVITATION_ERROR
+} = require('./errors');
 
-function getUserId(context) {
-  const Authorization = context.request.get('Authorization');
-  if (Authorization) {
-    const token = Authorization.replace('Bearer ', '');
-    const { userId } = jwt.verify(token, process.env.APP_SECRET);
-    return userId;
-  }
-  throw new Error('Not authenticated');
-}
+const { getUserId, generateRandomToken } = require('./function');
 
-function generateRandomToken() {
-  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-}
 
 module.exports = {
   getUserId,
-  generateRandomToken
+  generateRandomToken,
+  AUTHENTICATION_ERROR,
+  INVITATION_LIMIT_ERROR,
+  NO_VALID_USER_ERROR,
+  INVALID_PASSWORD_ERROR,
+  INVALID_INVITATION_ERROR
 };
