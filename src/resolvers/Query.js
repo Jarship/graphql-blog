@@ -1,4 +1,4 @@
-const { getUserId } = require("../utils");
+const { getUserId, AUTHENTICATION_ERROR } = require("../utils");
 
 function active () {
   return "The GraphQL API is active";
@@ -20,7 +20,15 @@ function unPublished (parent, args, context) {
 
 function getUser (parent, args, context) {
   const userId = getUserId(context);
-  return context.prisma.user({ id: userId });
+  if (!userId) {
+    return {
+      error: AUTHENTICATION_ERROR,
+    };
+  }
+  return {
+    ...context.prisma.user({ id: userId }),
+    error: null,
+  };
 };
 
 module.exports = {
