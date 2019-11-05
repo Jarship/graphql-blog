@@ -29,7 +29,7 @@ const options = {
   playground: process.env.PLAYGROUND,
   cors: {
     "origin": ["http://localhost", "https://satsui.com", "https://www.satsui.com"],
-    "allowedHeaders": ["Authorization"]
+    "allowedHeaders": ["Authorization", "Content-Type"]
   }
 };
 server.start(options, ({ port }) => console.log(`Server is running on http://localhost:${port}`));
