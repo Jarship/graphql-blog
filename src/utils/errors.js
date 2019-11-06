@@ -23,10 +23,21 @@ const INVALID_INVITATION_ERROR = {
   message: 'Invitation is not valid'
 };
 
+const FAILED_UPLOAD_ERROR = {
+  name: 'Failed Upload',
+  message: 'Profile image failed to upload'
+};
+
+const IMPROPER_FILE_FORMAT = {
+  name: 'Improper File Format',
+  message: 'Image files must be of a common format'
+};
+
 module.exports = {
   AUTHENTICATION_ERROR,
   INVITATION_LIMIT_ERROR,
   NO_VALID_USER_ERROR,
   INVALID_PASSWORD_ERROR,
-  INVALID_INVITATION_ERROR
+  INVALID_INVITATION_ERROR,
+  FAILED_UPLOAD_ERROR
 };

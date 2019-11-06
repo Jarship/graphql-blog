@@ -5,7 +5,7 @@ const PASS_SECRET = process.env.PASS_SECRET;
 const { 
   getUserId,
   generateRandomToken,
-  getPresignedUploadUrl,
+  putImageIntoBucket,
   AUTHENTICATION_ERROR,
   INVITATION_LIMIT_ERROR,
   NO_VALID_USER_ERROR,
@@ -134,25 +134,30 @@ async function uploadProfilePicture (parent, args, context) {
   const userId = getUserId(context);
   if (!userId) {
     return {
-      url: "",
+      success: false,
       error: AUTHENTICATION_ERROR,
     };
   }
 
-  const { location, url } = await getPresignedUploadUrl();
-  console.log("url is ", url);
-  console.log("location is ", location);
+  const file = args.file;
+  const { location, error } = await putImageIntoBucket(file);
+  if (error) {
+    return {
+      sucess: false,
+      error
+    };
+  }
   await context.prisma.updateUser(
     {
-      where : { id: userId },
+      where: { id: userId },
       data: { photo: location }
     }
   );
-
-  return {
-    url,
-    error: null,
-  };
+    return {
+      success: true,
+      error: null,
+    };
+  // }
 };
 
 

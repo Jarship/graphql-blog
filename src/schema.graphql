@@ -48,8 +48,8 @@ type Error {
   message: String!
 }
 
-type PhotoUpload {
-  url: String
+type UploadResult {
+  success: Boolean!
   error: Error
 }
 
@@ -60,5 +60,5 @@ type Mutation {
   expireInvite (invite: String!): Invite!
   markVisitor (ipAddress: String!): Boolean!
   logError (message: String!, location: String!, status: String!): Boolean!
-  uploadProfilePicture: PhotoUpload!
+  uploadProfilePicture (file: String!): UploadResult!
 }
