@@ -22,8 +22,7 @@ async function photo (parent, args, context) {
 
 function url (parent, args, context) {
   if (!parent.id) return "";
-  const profileUrl = generateRandomToken();
-  return profileUrl;
+  return parent.profileUrl;
 };
 
 module.exports = {

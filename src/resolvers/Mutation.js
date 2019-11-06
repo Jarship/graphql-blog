@@ -110,7 +110,8 @@ async function signInUser (parent, args, context) {
 
 async function createUser (parent, args, context) {
   const password = await bcrypt.hash(args.password, parseInt(PASS_SECRET, 10));
-  const user = await context.prisma.createUser({ ...args, password});
+  const profileUrl = generateRandomToken();
+  const user = await context.prisma.createUser({ ...args, password, profileUrl });
   const token = jwt.sign({ userId: user.id}, APP_SECRET);
   
   return {

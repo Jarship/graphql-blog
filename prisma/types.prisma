@@ -36,6 +36,7 @@ type User {
   comments: [Comment!]! @relation(link: INLINE)
   restriction: Flagged! @default(value: NONE)
   invitations: [Invite!]! @relation(name: "Invites", link: INLINE)
+  profileUrl: String! @unique
 }
 
 type Visitor {
