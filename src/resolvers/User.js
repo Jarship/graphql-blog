@@ -1,4 +1,5 @@
 const fetch = require('isomorphic-unfetch');
+const { generateRandomToken } = require('../utils');
 
 async function invitations (parent, args, context) {
   if(!parent.id) return "";
@@ -17,9 +18,16 @@ async function photo (parent, args, context) {
   } else {
     return user.photo;
   }
-}
+};
+
+function url (parent, args, context) {
+  if (!parent.id) return "";
+  const profileUrl = generateRandomToken();
+  return profileUrl;
+};
 
 module.exports = {
   invitations,
   photo,
+  url,
 };

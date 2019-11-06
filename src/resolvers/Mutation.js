@@ -5,6 +5,7 @@ const PASS_SECRET = process.env.PASS_SECRET;
 const { 
   getUserId,
   generateRandomToken,
+  getPresignedUploadUrl,
   AUTHENTICATION_ERROR,
   INVITATION_LIMIT_ERROR,
   NO_VALID_USER_ERROR,
@@ -127,7 +128,33 @@ async function markVisitor (parent, args, context) {
 async function logError (parent, args, context) {
   const error = await context.prisma.createError({ ...args });
   return !!error;
-}
+};
+
+async function uploadProfilePicture (parent, args, context) {
+  const userId = getUserId(context);
+  if (!userId) {
+    return {
+      url: "",
+      error: AUTHENTICATION_ERROR,
+    };
+  }
+
+  const { location, url } = await getPresignedUploadUrl();
+  console.log("url is ", url);
+  console.log("location is ", location);
+  await context.prisma.updateUser(
+    {
+      where : { id: userId },
+      data: { photo: location }
+    }
+  );
+
+  return {
+    url,
+    error: null,
+  };
+};
+
 
 module.exports = {
   signInUser,
@@ -136,4 +163,5 @@ module.exports = {
   expireInvite,
   markVisitor,
   logError,
+  uploadProfilePicture,
 };
