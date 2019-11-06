@@ -24,6 +24,7 @@ type User {
   id: ID
   name: String
   email: String
+  url: String
   photo: String
   posts: [BlogPost!]
   status: String
@@ -47,6 +48,11 @@ type Error {
   message: String!
 }
 
+type UploadResult {
+  success: Boolean!
+  error: Error
+}
+
 type Mutation {
   signInUser (email: String!, password: String!): AuthPayload!
   createUser (email: String!, name: String!, password: String!): AuthPayload!
@@ -54,4 +60,5 @@ type Mutation {
   expireInvite (invite: String!): Invite!
   markVisitor (ipAddress: String!): Boolean!
   logError (message: String!, location: String!, status: String!): Boolean!
+  uploadProfilePicture (file: String!): UploadResult!
 }

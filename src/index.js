@@ -27,9 +27,12 @@ const options = {
   endpoint: process.env.ENDPOINT,
   subscriptions: process.env.SUBSCRIPTION,
   playground: process.env.PLAYGROUND,
+  bodyParserOptions: {
+    limit: '5000000kb'
+  },
   cors: {
     "origin": ["http://localhost", "https://satsui.com", "https://www.satsui.com"],
-    "allowedHeaders": ["Authorization"]
+    "allowedHeaders": ["Authorization", "Content-Type"]
   }
 };
 server.start(options, ({ port }) => console.log(`Server is running on http://localhost:${port}`));
