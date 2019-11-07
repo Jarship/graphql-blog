@@ -1,9 +1,11 @@
 require('dotenv').config();
 const { GraphQLServer } = require('graphql-yoga');
 const { prisma } = require('./generated/prisma-client');
+const { upload } = require('graphql-middleware-apollo-upload-server');
 const Query = require('./resolvers/Query');
 const Mutation = require('./resolvers/Mutation');
 const User = require('./resolvers/User');
+const { uploadToS3 } = require('./utils');
 
 const resolvers = {
   Query,
@@ -14,6 +16,7 @@ const resolvers = {
 const server = new GraphQLServer({
   typeDefs: process.env.PATHWAY,
   resolvers,
+  middlewares: [upload({ uploadHandler: uploadToS3 })],
   context: request => {
     return {
       ...request,
@@ -27,9 +30,6 @@ const options = {
   endpoint: process.env.ENDPOINT,
   subscriptions: process.env.SUBSCRIPTION,
   playground: process.env.PLAYGROUND,
-  bodyParserOptions: {
-    limit: '5000000kb'
-  },
   cors: {
     "origin": ["http://localhost", "https://satsui.com", "https://www.satsui.com"],
     "allowedHeaders": ["Authorization", "Content-Type"]
