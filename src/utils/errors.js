@@ -13,6 +13,11 @@ const NO_VALID_USER_ERROR = {
   message: "No valid user was found with that email"
 };
 
+const NO_USER_MATCHES_URL_ERROR = {
+  name: 'No User Matches URL',
+  message: "No User matches that profile url"
+};
+
 const INVALID_PASSWORD_ERROR = {
   name: 'Invalid Password',
   message: 'Password was incorrect for the user'
@@ -37,6 +42,7 @@ module.exports = {
   AUTHENTICATION_ERROR,
   INVITATION_LIMIT_ERROR,
   NO_VALID_USER_ERROR,
+  NO_USER_MATCHES_URL_ERROR,
   INVALID_PASSWORD_ERROR,
   INVALID_INVITATION_ERROR,
   FAILED_UPLOAD_ERROR

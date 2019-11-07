@@ -1,6 +1,7 @@
 type Query {
   active: String!
   feed: Feed!
+  profile (url: String!): User!
   blog(id: ID!): BlogPost
   unPublished: [BlogPost!]!
   getUser: User!
