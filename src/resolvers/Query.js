@@ -1,7 +1,20 @@
-const { getUserId, AUTHENTICATION_ERROR } = require("../utils");
+const { getUserId, AUTHENTICATION_ERROR, NO_USER_MATCHES_URL_ERROR } = require("../utils");
 
 function active () {
   return "The GraphQL API is active";
+};
+
+async function profile (parent, args, context) {
+  const user = await context.prisma.user({ profileUrl: args.url });
+  if (!user) {
+    return {
+      error: NO_USER_MATCHES_URL_ERROR
+    };
+  } else {
+    return {
+      ...user
+    };
+  }
 };
 
 function feed (parent, args, context) {
@@ -33,6 +46,7 @@ function getUser (parent, args, context) {
 
 module.exports = {
   active,
+  profile,
   feed,
   blog,
   unPublished,
