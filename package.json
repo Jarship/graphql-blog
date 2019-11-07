@@ -1,6 +1,6 @@
 {
   "name": "graphql-blog",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "A GraphQL API for a blog",
   "main": "index.js",
   "repository": {
@@ -21,6 +21,7 @@
     "aws-sdk": "^2.563.0",
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
+    "graphql-middleware-apollo-upload-server": "^1.0.10",
     "graphql-yoga": "^1.18.3",
     "isomorphic-unfetch": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
