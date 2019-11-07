@@ -10,12 +10,12 @@ const {
 
 const { getUserId, generateRandomToken } = require('./functions');
 
-const { putImageIntoBucket } = require('./aws-helpers');
+const {  uploadToS3 } = require('./aws-helpers');
 
 module.exports = {
   getUserId,
   generateRandomToken,
-  putImageIntoBucket,
+  uploadToS3,
   AUTHENTICATION_ERROR,
   INVITATION_LIMIT_ERROR,
   NO_VALID_USER_ERROR,
