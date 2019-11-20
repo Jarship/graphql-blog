@@ -28,6 +28,14 @@
     "prisma-client-lib": "^1.34.10"
   },
   "scripts": {
-    "start": "node src/index.js"
+    "schema-lint": "graphql-schema-linter ./src/schema.graphql",
+    "lint": "yarn schema-lint && eslint ./ --quiet",
+    "start": "node src/index.js",
+    "production": "yarn install --production=true && yarn start"
+  },
+  "devDependencies": {
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "graphql-schema-linter": "^0.2.2"
   }
 }

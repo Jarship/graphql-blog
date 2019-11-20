@@ -1,5 +1,6 @@
 const { S3 } = require('aws-sdk');
 const { generateRandomToken } = require('./functions');
+
 const S3_BUCKET = process.env.USER_PROFILE_BUCKET_NAME;
 const PHOTOS_DIRECTORY = process.env.USER_PROFILE_PHOTOS_DIRECTORY;
 
@@ -9,8 +10,8 @@ const client = new S3({
   params: { Bucket: S3_BUCKET },
 });
 
-const uploadToS3 = async file => {
-  const { createReadStream, filename, mimetype } = file;
+const uploadToS3 = async (file) => {
+  const { createReadStream, filename } = file;
 
   const stream = createReadStream();
   const token = generateRandomToken();
@@ -24,7 +25,7 @@ const uploadToS3 = async file => {
     })
     .promise();
 
-    return response.Location;
+  return response.Location;
 };
 
 module.exports = {

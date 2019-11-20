@@ -1,41 +1,41 @@
 const AUTHENTICATION_ERROR = {
   name: 'Authentication Error',
-  message: 'User is not authenticated'
+  message: 'User is not authenticated',
 };
 
 const INVITATION_LIMIT_ERROR = {
   name: 'Invitation Limit',
-  message: 'User has reached their invitation limit'
+  message: 'User has reached their invitation limit',
 };
 
 const NO_VALID_USER_ERROR = {
   name: 'No Valid User',
-  message: "No valid user was found with that email"
+  message: 'No valid user was found with that email',
 };
 
 const NO_USER_MATCHES_URL_ERROR = {
   name: 'No User Matches URL',
-  message: "No User matches that profile url"
+  message: 'No User matches that profile url',
 };
 
 const INVALID_PASSWORD_ERROR = {
   name: 'Invalid Password',
-  message: 'Password was incorrect for the user'
+  message: 'Password was incorrect for the user',
 };
 
 const INVALID_INVITATION_ERROR = {
   name: 'Invalid Invitation',
-  message: 'Invitation is not valid'
+  message: 'Invitation is not valid',
 };
 
 const FAILED_UPLOAD_ERROR = {
   name: 'Failed Upload',
-  message: 'Profile image failed to upload'
+  message: 'Profile image failed to upload',
 };
 
 const IMPROPER_FILE_FORMAT = {
   name: 'Improper File Format',
-  message: 'Image files must be of a common format'
+  message: 'Image files must be of a common format',
 };
 
 module.exports = {
@@ -45,5 +45,6 @@ module.exports = {
   NO_USER_MATCHES_URL_ERROR,
   INVALID_PASSWORD_ERROR,
   INVALID_INVITATION_ERROR,
-  FAILED_UPLOAD_ERROR
+  FAILED_UPLOAD_ERROR,
+  IMPROPER_FILE_FORMAT,
 };

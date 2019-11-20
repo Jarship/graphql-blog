@@ -1,31 +1,31 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const APP_SECRET = process.env.APP_SECRET;
-const PASS_SECRET = process.env.PASS_SECRET;
-const { 
+
+const { APP_SECRET } = process.env;
+const { PASS_SECRET } = process.env;
+const {
   getUserId,
   generateRandomToken,
   AUTHENTICATION_ERROR,
   INVITATION_LIMIT_ERROR,
   NO_VALID_USER_ERROR,
   INVALID_PASSWORD_ERROR,
-  INVALID_INVITATION_ERROR
 } = require('../utils');
 
 
-async function createInvite (parent, args, context) {
+async function createInvite(parent, args, context) {
   const userId = getUserId(context);
   if (!userId) {
     return {
       invite: null,
-      error : AUTHENTICATION_ERROR
+      error: AUTHENTICATION_ERROR,
     };
   }
   const invites = await context.prisma.user({ id: userId }).invitations();
   if (invites.length >= 5) {
     return {
       invite: null,
-      error: INVITATION_LIMIT_ERROR
+      error: INVITATION_LIMIT_ERROR,
     };
   }
   const token = generateRandomToken();
@@ -34,67 +34,69 @@ async function createInvite (parent, args, context) {
     {
       where: { id: userId },
       data: {
-        invitations : {
-          connect: { id: invite.id }
-        }
-      }
-    }
+        invitations: {
+          connect: { id: invite.id },
+        },
+      },
+    },
   );
-  
+
   return {
     invite: token,
     error: null,
   };
-};
+}
 
-async function expireInvite (parent, args, context) {
+async function expireInvite(parent, args, context) {
   const userId = getUserId(context);
   if (!userId) {
     return {
       invite: null,
-      error: AUTHENTICATION_ERROR
+      error: AUTHENTICATION_ERROR,
 
-    }
+    };
   }
   const date = new Date();
   const invite = await context.prisma.updateInvite(
     {
-      where : { token : args.invite },
+      where: { token: args.invite },
       data: {
-        expiresAt: date.toISOString()
-      }
-    }
+        expiresAt: date.toISOString(),
+      },
+    },
   );
   await context.prisma.updateUser(
     {
       where: { id: userId },
-      data: { invitations : {
-        disconnect: { id: invite.id }
-      }}
-    }
+      data: {
+        invitations: {
+          disconnect: { id: invite.id },
+        },
+      },
+    },
   );
   return {
-    invite: "Token expired",
-    error: null
+    invite: 'Token expired',
+    error: null,
   };
-};
+}
 
-async function signInUser (parent, args, context) {
+async function signInUser(parent, args, context) {
   const user = await context.prisma.user({ email: args.email });
   if (!user) {
     return {
       token: null,
       user: null,
-      error: NO_VALID_USER_ERROR
+      error: NO_VALID_USER_ERROR,
     };
   }
-  
+
   const valid = await bcrypt.compare(args.password, user.password);
   if (!valid) {
     return {
       token: null,
       user: null,
-      error: INVALID_PASSWORD_ERROR
+      error: INVALID_PASSWORD_ERROR,
     };
   }
 
@@ -105,32 +107,32 @@ async function signInUser (parent, args, context) {
     user,
     error: null,
   };
-};
+}
 
-async function createUser (parent, args, context) {
+async function createUser(parent, args, context) {
   const password = await bcrypt.hash(args.password, parseInt(PASS_SECRET, 10));
   const profileUrl = generateRandomToken();
   const user = await context.prisma.createUser({ ...args, password, profileUrl });
-  const token = jwt.sign({ userId: user.id}, APP_SECRET);
-  
+  const token = jwt.sign({ userId: user.id }, APP_SECRET);
+
   return {
     token,
     user,
     error: null,
   };
-};
+}
 
-async function markVisitor (parent, args, context) {
+async function markVisitor(parent, args, context) {
   const visitor = await context.prisma.createVisitor({ ipAddress: args.ipAddress });
   return !!visitor;
-};
+}
 
-async function logError (parent, args, context) {
+async function logError(parent, args, context) {
   const error = await context.prisma.createError({ ...args });
   return !!error;
-};
+}
 
-async function uploadProfilePicture (parent, args, context) {
+async function uploadProfilePicture(parent, args, context) {
   // "picture" has already been uploaded!
   const userId = getUserId(context);
   if (!userId) {
@@ -143,15 +145,15 @@ async function uploadProfilePicture (parent, args, context) {
   await context.prisma.updateUser(
     {
       where: { id: userId },
-      data: { photo: args.picture }
-    }
+      data: { photo: args.picture },
+    },
   );
 
-    return {
-      photoUrl: args.picture,
-      error: null,
-    };
-};
+  return {
+    photoUrl: args.picture,
+    error: null,
+  };
+}
 
 
 module.exports = {
