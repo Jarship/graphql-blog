@@ -72,6 +72,7 @@ type User {
   invitations: [Invite!]! @relation(name: "Invites", link: INLINE)
   "A unique url of the user's profile endpoint, used to query"
   profileUrl: String! @unique
+  "The description of the user, represented as the User's About Me"
   description: String
 }
 
