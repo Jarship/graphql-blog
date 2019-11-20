@@ -37,6 +37,7 @@ type User {
   restriction: Flagged! @default(value: NONE)
   invitations: [Invite!]! @relation(name: "Invites", link: INLINE)
   profileUrl: String! @unique
+  description: String
 }
 
 type Visitor {

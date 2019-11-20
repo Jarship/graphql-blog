@@ -33,6 +33,7 @@ type User {
   status: String
   invitations: [String!]
   error: Error
+  description: String
 }
 
 type AuthPayload {
