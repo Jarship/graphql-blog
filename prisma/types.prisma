@@ -1,81 +1,146 @@
+"The Page type is used to represent a page that can be visited"
 type Page {
+  "Each Page has it's own id"
   id: ID! @id
+  "The date-time that the Page was created as a separate page"
   createdAt: DateTime! @createdAt
+  "The most recent date-time that the page was updated. Used to check if it's more popular after a change"
   updatedAt: DateTime! @updatedAt
+  "The name of the page"
   name: String!
+  "The url endpoint of the page"
   url: String!
+  "A list of visitors that have been to the page"
   visitors: [Visitor!]! @relation(link: INLINE)
 }
 
+"The BlogPost type is used to represent a blog, in whatever stage that it is"
 type BlogPost {
+  "Each BlogPost has an id"
   id: ID! @id
+  "The date-time that the blog first was created"
   createdAt: DateTime! @createdAt
+  "The most recent date-time that the blog was updated. Not necessarily by the author"
   updatedAt: DateTime! @updatedAt
+  "The title of the blog post"
   title: String!
+  "The html content of the blog post, made in a wysiwyg editor"
   post: String!
+  "The author of the blog post"
   author: User! @relation(name: "Author")
+  "A list of contributors/editors to the blgo post"
   editors: [User!]! @relation(name: "Editors", onDelete: SET_NULL)
+  "A list of visitors that have been to the blog"
   vistors: [Visitor!]! @relation(link: INLINE)
+  "The current status of the blog, representing what stage of development it is in."
   blogStatus: BlogStatus! @default(value: UNSAVED)
+  "A list of keywords associated with the blog"
   tags: [String!]!
+  "A list of comments users have left on the blog"
   comments: [Comment!]! @relation(link: INLINE)
+  "The current level of restriction the blog has"
   restriction: Flagged! @default(value: NONE)
 }
 
+"The user type represents any person's account"
 type User {
+  "Each user has an id"
   id: ID! @id
+  "The name of the user. Also the display name"
   name: String!
+  "The email of the user, used to query from the database"
   email: String! @unique
+  "A bcrypt stored password of the user's choice"
   password: String!
+  "A url of the user's photo"
   photo: String
+  "A list of blog posts that the user has written"
   posts: [BlogPost!]! @relation(name: "Author", link: INLINE)
+  "A list of blog posts that the user has edited"
   edits: [BlogPost!]! @relation(name: "Editors", link: INLINE)
+  "The date-time that the user was created"
   createdAt: DateTime! @createdAt
+  "The date-time that the user was updated"
   updatedAt: DateTime! @updatedAt
+  "The account level of the user"
   status: UserLevel! @default(value: UNVERIFIED)
+  "A list of comments that the user has left"
   comments: [Comment!]! @relation(link: INLINE)
+  "Any restriction the user may have"
   restriction: Flagged! @default(value: NONE)
+  "A list of up to 5 invitations for higher user account levels"
   invitations: [Invite!]! @relation(name: "Invites", link: INLINE)
+  "A unique url of the user's profile endpoint, used to query"
   profileUrl: String! @unique
   description: String
 }
 
+"The Visitor type is used for site analytics"
 type Visitor {
+  "Each visitor has a unique id"
   id: ID! @id
+  "The date of visit"
   createdAt: DateTime! @createdAt
+  "The ipAddress of the visitor"
   ipAddress: String!
 }
 
+"The Subscriber type is used for people that want email notifications"
 type Subscriber {
+  "The id of the Subscriber"
   id: ID! @id
+  "The date the subscription was made"
   createdAt: DateTime! @createdAt
+  "The email of the user, where the update is sent"
   email: String!
+  "Whether the subscription is still active"
   active: Boolean! @default(value: true)
+  "The topics a user wants to be subscribed to"
   tags: [String!]!
 }
 
+"The Comment type is used for comments left on blogs"
 type Comment {
+  "Each Comment has an id"
   id: ID! @id
+  "The date-time the comment was left"
   createdAt: DateTime! @createdAt
+  "The date-time the comment was edited"
   updatedAt: DateTime! @updatedAt
+  "What the comment says"
   content: String!
+  "The blog the comment was left on"
   post: BlogPost!
+  "If a comment is a response to another comment, that comment is stored here"
   parentComment: Comment @relation(name: "Parent", link: INLINE, onDelete: SET_NULL)
+  "Any comments that are left in response"
   childComments: [Comment!]! @relation(name: "Children", link: INLINE, onDelete: SET_NULL)
+  "If the comment is restricted"
   restriction: Flagged! @default(value: NONE)
 }
 
+"The Invite type is used for upgrading other users to a higher account level"
 type Invite {
+  "Each Invite has an id"
   id: ID! @id
+  "The date-time the invitation was created"
   createdAt: DateTime! @createdAt
+  "The date-time the invitation was expired"
   expiresAt: DateTime
+  "The string that represents the token"
   token: String! @unique
 }
 
+"The Error type is used to log errors and warnings in the wild"
 type Error {
+  "Each Error has an id"
   id: ID! @id
+  "The date-time the error happened"
   createdAt: DateTime! @createdAt
+  "The error message"
   message: String!
+  "Whether it is an error or a warning"
   status: ErrorStatus!
+  "Where the error occured"
   location: String!
 }

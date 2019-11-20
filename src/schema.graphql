@@ -1,68 +1,163 @@
+"Upload represents an file upload"
 scalar Upload
 
+"The available queries for the API"
 type Query {
+  "The active query checks if the api is active"
   active: String!
+  "The feed query grabs a list of recent blogs. This may be different per user"
   feed: Feed!
-  profile (url: String!): User!
-  blog(id: ID!): BlogPost
+  "The profile query grabs a user to display their profile"
+  profile (
+    "Requires the url of the user's profile"
+    url: String!
+    ): User!
+  "The blog query grabs the entire blog post"
+  blog(
+    "Requires the id of the blog"
+    id: ID!
+    ): BlogPost
+  "The unPublished pulls blogs that are unPublished. Need to be administrator"
   unPublished: [BlogPost!]!
+  "The getUser query accesses the current session user based upon a jwt"
   getUser: User!
 }
 
+"BlogPost types represent a single blog post. May not be published"
 type BlogPost {
+  "The id field of the blog"
   id: ID!
+  "The title of the blog"
   title: String!
+  "The html contents of the blog. Set from a wysiwyg editor"
   post: String!
+  "The user that wrote the BlogPost"
   author: User!
+  "A list of the users that made edits to the BlogPost"
   editors: [User!]!
 }
 
+"Feed types represent the BlogPosts for a given user, or the default posts"
 type Feed {
+  "The blogs of the feed"
   blogs: [BlogPost!]!
+  "The count of blogs"
   count: Int!
+  "An error object, to be handled manually on the front end"
   error: Error
 }
 
+"""
+User types represent any account holder.
+User levels vary, each being held in the status field
+"""
 type User {
+  "The id of the user"
   id: ID
+  "The name of the user"
   name: String
+  "The email of the user. Lowercase by default to avoid collisions."
   email: String
+  "The url of the user's profile"
   url: String
+  "The user's photo, displayed on their profile"
   photo: String
+  "A list of the user's blogs, if they have written any"
   posts: [BlogPost!]
+  """
+  The account level of the user. Can be :
+  UNVERIFIED
+  READER
+  EDITOR
+  AUTHOR
+  ADMINISTRATOR
+  """
   status: String
+  "A list of the user's invitations. Users can invite lower level users to a status similar to themselves"
   invitations: [String!]
+  "An error object, to be handled manually on the front end"
   error: Error
   description: String
 }
 
+"""
+AuthPayload types are used when a user registers or logs in.
+"""
 type AuthPayload {
+  "A JWT to be kept as a cookie on the front end"
   token: String
+  "A the current user that is now authenticated"
   user: User
+  "An error object, to be handled manually on the front end."
   error: Error
 }
 
+"Invite types are strings that can be used by a user to upgrade their account status"
 type Invite {
+  "A string of characters meant to invite a user to a higher account level"
   invite: String
+  "An error object, to be handled manually on the front end"
   error: Error
 }
 
+"The error object. Meant to communicate to the front end, what went wrong"
 type Error {
+  "The name of the error"
   name: String!
+  "The message of the error"
   message: String!
 }
 
+"UploadResult types are used when a user uploads a profile picture"
 type UploadResult {
+  "The url of the photo they have uploaded"
   photoUrl: String
+  "An error object, to be handled manually by the front end"
   error: Error
 }
 
+"Mutations are used for Create, Update, and Delete functions in the API"
 type Mutation {
-  signInUser (email: String!, password: String!): AuthPayload!
-  createUser (email: String!, name: String!, password: String!): AuthPayload!
+  "The signInUser mutation allows a registered user to login"
+  signInUser (
+    "The user's email, a unique field used to find the user"
+    email: String!,
+    "The user's password, uses a secret variable and bcrypt to store a secure password"
+    password: String!
+    ): AuthPayload!
+  "The createUser mutation allows a user to be created"
+  createUser (
+    "The user's email, a unique field meant to find the user"
+    email: String!,
+    "The user's name, meant for display in comments and blogs"
+    name: String!,
+    "The user's password, uses a secret varaible and bcrypt to store a secure password"
+    password: String!
+    ): AuthPayload!
+  "The createInvite mutation allows a user to create a invitation to upgrade a user's accoutn status"
   createInvite: Invite!
-  expireInvite (invite: String!): Invite!
-  markVisitor (ipAddress: String!): Boolean!
-  logError (message: String!, location: String!, status: String!): Boolean!
-  uploadProfilePicture (picture: Upload!): UploadResult!
+  "The expireInvite mutation allows a user to expire their own invite, or for an invitation to be used."
+  expireInvite (
+    "The string that a user can use to upgrade their account status"
+    invite: String!
+    ): Invite!
+  "The markVisitor mutation is used to mark the ip address of a visitor. Used for site analytics"
+  markVisitor (
+    "The ipAddress of the user"
+    ipAddress: String!
+    ): Boolean!
+  "The logError mutation is used to track when an error happens, and where it happened. Should enable debugging wild bugs"
+  logError (
+    "The error message received"
+    message: String!,
+    "Where the error occured"
+    location: String!,
+    "What priority the error is"
+    status: String!
+    ): Boolean!
+  "The uploadProfilePicture mutation is used when user's update their profile photo"
+  uploadProfilePicture (
+    "The picture, an Upload scalar, that is sent to S3"
+    picture: Upload!
+    ): UploadResult!
 }

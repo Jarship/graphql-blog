@@ -5,12 +5,12 @@ const {
   NO_USER_MATCHES_URL_ERROR,
   INVALID_PASSWORD_ERROR,
   INVALID_INVITATION_ERROR,
-  FAILED_UPLOAD_ERROR
+  FAILED_UPLOAD_ERROR,
 } = require('./errors');
 
 const { getUserId, generateRandomToken } = require('./functions');
 
-const {  uploadToS3 } = require('./aws-helpers');
+const { uploadToS3 } = require('./aws-helpers');
 
 module.exports = {
   getUserId,
@@ -22,5 +22,5 @@ module.exports = {
   NO_USER_MATCHES_URL_ERROR,
   INVALID_PASSWORD_ERROR,
   INVALID_INVITATION_ERROR,
-  FAILED_UPLOAD_ERROR
+  FAILED_UPLOAD_ERROR,
 };

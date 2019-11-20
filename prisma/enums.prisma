@@ -1,26 +1,48 @@
+"The enum UserLevel represents a user's account level"
 enum UserLevel {
-  UNVERIFIED
-  READER
-  EDITOR
-  AUTHOR
+  "The ADMINISTRATOR option is the highest level, with analytics and website control"
   ADMINISTRATOR
+  "The AUTHOR option is the second highest level, with the ability to write blogs"
+  AUTHOR
+  "The EDITOR option is the third highest level, with the ability to edit blog posts"
+  EDITOR
+  "The READER option is the basic level, with the ability to leave comments on blog posts"
+  READER
+  "The UNVERIFIED option is used to represent a user that hasn't verified their account"
+  UNVERIFIED
 }
 
+"""
+The enum Flagged is used to represent when a User, Blog, or Comment are restricted
+Restriction may be temporary, but it requires review, and voting to be permanent
+"""
 enum Flagged {
-  NONE
-  SPAM
-  NSFW
+  "The ABUSIVE option is to represent Users, Blogs, or Comments that are abusive in nature"
   ABUSIVE
+  "The NONE option is the default option"
+  NONE
+  "The NSFW option is to represent Users, Blogs, or Comments that are inappropriate in nature"
+  NSFW
+  "The SPAM option is to represent Users, Blogs, or Comments that are spam"
+  SPAM
 }
 
+"The enum BlogStatus is used to represent the stage of a blog's existence, from UNSAVED to PUBLISHED"
 enum BlogStatus {
-  UNSAVED
+  "The DRAFT option represents a saved draft, personal to the user"
   DRAFT
-  REVIEW
+  "The PUBLISHED option represents a published blog, with public visibility"
   PUBLISHED
+  "The REVIEW option represents blogs that are ready for review from editors/authors/admins"
+  REVIEW
+  "The UNSAVED option represents blogs that haven't even been saved yet. This is the default status"
+  UNSAVED
 }
 
+"The enum ErrorStatus represents what level of error is being stored"
 enum ErrorStatus {
-  WARNING
+  "The ERROR option is a serious error, that should not have been encountered"
   ERROR
+  "The WARNING options is an issue that is not necessarily a bug, but should be tracked"
+  WARNING
 }
